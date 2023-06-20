@@ -1,23 +1,27 @@
-# 指定我们的基础镜像是node，版本是v8.0.0
-FROM node:latest
-# 指定制作我们的镜像的联系人信息（镜像创建者）
-MAINTAINER ynid
+FROM node:16 as builder
  
-# 将根目录下的文件都copy到container（运行此镜像的容器）文件系统的app文件夹下
-ADD . /app/
-# cd到app文件夹下
-WORKDIR /app
+WORKDIR /portal
+COPY . .
  
-# 安装项目依赖包
+ARG proxy=""
+ 
+RUN if [ "$proxy" != "" ]; \
+    then npm config set proxy "$proxy" && npm config set https-proxy "$proxy"; \
+    else echo Do not set proxy; \
+    fi
 RUN npm install
-RUN npm rebuild node-sass --force
  
-# 配置环境变量
-ENV HOST 0.0.0.0
-ENV PORT 8000
  
-# 容器对外暴露的端口号
-EXPOSE 8000
+RUN chmod +x node_modules/.bin/tsc
+RUN chmod +x node_modules/.bin/vite
  
-# 容器启动时执行的命令，类似npm run start
-CMD ["npm", "start"]
+RUN npm run build
+ 
+FROM nginx:alpine
+WORKDIR /portal
+COPY --from=builder /portal/dist/ /usr/share/nginx/html/
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d/nginx.conf
+COPY default.conf.template /etc/nginx/conf.d
+ 
+CMD /bin/sh -c "envsubst '80' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'

@@ -1,0 +1,14 @@
+version: "2"
+services:
+  web:
+    platform: linux/amd64
+    container_name: node_web
+    build:
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - proxy=${proxy}
+    volumes:
+      - "./portal:/portal"
+    ports:
+      - ${portal_port}:80

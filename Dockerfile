@@ -1,7 +1,7 @@
 # 指定我们的基础镜像是node，版本是v8.0.0
 FROM node:latest
 # 指定制作我们的镜像的联系人信息（镜像创建者）
-MAINTAINER EOI
+MAINTAINER ynid
  
 # 将根目录下的文件都copy到container（运行此镜像的容器）文件系统的app文件夹下
 ADD . /app/

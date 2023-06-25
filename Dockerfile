@@ -9,13 +9,13 @@ RUN if [ "$proxy" != "" ]; \
     then npm config set proxy "$proxy" && npm config set https-proxy "$proxy"; \
     else echo Do not set proxy; \
     fi
-RUN npm install
+# RUN npm install
  
  
 RUN chmod +x node_modules/.bin/tsc
 RUN chmod +x node_modules/.bin/vite
  
-RUN npm run build
+# RUN npm run build
  
 FROM nginx:alpine
 WORKDIR /portal

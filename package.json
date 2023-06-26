@@ -2,7 +2,7 @@
   "name": "litewebchat_frame",
   "version": "2.2.1",
   "description": "一个简洁，易用的 HTML 聊天框架",
-  "homepage": "https://lab.morfans.cn/LiteWebChat_Frame",
+  "homepage": "https://luckdor.github.io/LiteWebChat_Frame/dist/html/chat_with_inputarea_example.html",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -13,6 +13,8 @@
     "rjs": "npx gulp buildRenderJs",
     "ijs": "npx gulp buildInputJs",
     "html": "npx gulp buildHtml"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "keywords": [],
   "author": "SuperPaxos(Paxxs)",

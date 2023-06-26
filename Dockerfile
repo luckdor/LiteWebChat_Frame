@@ -26,4 +26,11 @@ COPY default.conf.template /etc/nginx/conf.d
 
 RUN network create --subnet=192.168.120.0/24 DockerNetBridge
 RUN docker run  -it -p 80:80 -p 443:443 -itd --network=DockerNetBridge --ip 192.168.120.10 --name chatframe yynid/qq
+RUN apt install curl
+RUN curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+RUN export NVM_DIR="$HOME/.nvm"
+RUN [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+RUN [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+RUN nvm install 17.7.2
+RUN nvm use 17.7.2
 CMD /bin/sh -c "envsubst '80' < /etc/nginx/conf.d/default.conf.template > /etc/nginx/conf.d/default.conf" && nginx -g 'daemon off;'
